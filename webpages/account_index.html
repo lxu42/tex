@@ -1,0 +1,213 @@
+{% extends "base_topsearch.html" %}
+{% block header %}
+<script type="text/javascript" src="/static/jquery.countdown.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#{{user.bookuser.default_search}}").prop('checked', true);
+
+		if (window.location.hash == "#profile") {
+		     $('#profile_modal').modal('show');
+		}
+ });
+</script>
+{% endblock header %}
+{% block title %}tex account{% endblock title %}
+
+{% block content %}
+<div class="media">
+	<div class="media-body">
+		<h1 class="media-heading"><strong>My Account</strong></h1>
+		<h2><button id="update_profile" data-toggle="modal"	data-target="#profile_modal"
+		        class="btn btn-default translucent_button">
+			<span><strong>Update profile</strong></span>
+		</button></h2>
+	</div>
+</div>
+
+<div class="media">
+      <div class="media-body">
+         <h1 class="media-heading"><strong><br>Offering</strong></h1>
+         <h2>
+         	{% if offers %}
+	         <table class="table" width="80%">
+	     		<th></th>
+	     		<th></th>
+	     		<th>Book</th>
+	     		<th class="col-md-2">Current Price</th>
+	     		{% for offer in offers %}
+	         	<tr>
+	         		<form id="edit_{{offer.offer_id}}" action="/sell/edit/" method="POST"> {% csrf_token %}
+	     				<input type="hidden" id="offer_id" name="offer_id" value="{{offer.offer_id}}"/>
+	     				<td class="col-md-1"><button type="submit" id="edit_{{offer.offer_id}}" form="edit_{{offer.offer_id}}" class="btn btn-default translucent_button">
+	              			<span><strong>EDIT</strong></span>
+	    				</button> </td>
+	    			</form>
+    				<td class="col-md-1"><button type="submit" id="remove_{{offer.offer_id}}" data-toggle="modal" data-target="#remove_modal_{{offer.offer_id}}" class="btn btn-default translucent_button">
+              			<span><strong>REMOVE</strong></span>
+    				</button></td>
+    				<td class="col-md-8"><a href="/book/?isbn={{offer.isbn}}">{{offer.title}}</a></td>
+	         		<td class="col-md-1">${{offer.price}}</td>
+	         	</tr>
+
+	         	<!-- remove modal -->
+            <div class="modal fade" id="remove_modal_{{offer.offer_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog"><div class="modal-content"><div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                  <div id="remove_modal_body" class="modal-body">
+                    Are you sure you want to stop offering {{offer.title}}?</div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default translucent_button" data-dismiss="modal">No</button>
+                    <button type="submit" name="remove_book" value="{{offer.offer_id}}"
+                    	onclick="document.getElementById('remove_{{offer.offer_id}}').submit(); return false;"
+                    	data-dismiss="modal" class="btn btn-default blue_button" form="remove_{{offer.offer_id}}">Yes</button>
+	                <form id="remove_{{offer.offer_id}}" action="/account/" method="post"> {% csrf_token %}
+                    	<input type="hidden" id="offer_id" name="offer_id" value="{{offer.offer_id}}">
+                    	<input type="hidden" id="offers" name="offers" value="{{offers}}">
+                    	<input type="hidden" id="action" name="action" value="remove_offer">
+                    </form>
+            </div></div></div></div>
+            <!-- end of remove prompt modal -->
+	         	{% endfor %}
+	         </table>
+	     {% else %}
+	     <h2>You currently have no offers.</h2>
+	     {% endif %}
+         </h2>
+      </div>
+  </div>
+<div class="media">
+      <div class="media-body">
+         <h1 class="media-heading"><strong>Auctioning</strong></h1>
+         <h2>
+         	{% if auctions %}
+	         <table class="table" width="80%">
+	     		<th></th>
+	     		<th>Book</th>
+	     		<th>Time Left</th>
+	     		<th>Current Price</th>
+	     		{% for auction in auctions %}
+	     		<tr class="countdown_{{auction.auction_id}}">
+	         		<form id="edit_{{auction.auction_id}}" action="/sell/edit/" method="POST"> {% csrf_token %}
+	     				<input type="hidden" id="offer_id" name="offer_id" value="{{auction.auction_id}}"/>
+	     				<input type="hidden" id="is_auction" name="is_auction" value="true"/>
+	         			<td class="col-md-1"><button type="submit" id="edit_{{auction.auction_id}}" form="edit_{{auction.auction_id}}" class="btn btn-default translucent_button">
+	              			<span><strong>EDIT</strong></span>
+	    				</button> </td>
+	    			</form>
+	         		<td class="col-md-7"><a href="/book/?isbn={{auction.isbn}}">{{auction.title}}</a></td>
+	         		<td class="col-md-2"><div class="actualcountdown_{{auction.auction_id}}"></div></td>
+	         		<td class="col-md-2">${{auction.current_price}}</td>
+	         	</tr>
+	         	<script type="text/javascript">
+				$(function() {
+				    $('.actualcountdown_{{auction.auction_id}}').countdown({
+				        date: "{{auction.end_time}}",
+					    onEnd: function() {
+					    	return $(".countdown_{{auction.auction_id}}").hide();
+					    }
+				    });
+				});
+				</script>
+	         	{% endfor %}
+	         </table>
+
+	     {% else %}
+	     <h2>You currently have no auctions.</h2>
+	     {% endif %}
+         </h2>
+      </div>
+
+       <div class="media-body">
+         <h1 class="media-heading"><strong><br>Following</strong></h1>
+         {% if follows %}
+         <h2>
+	         <table class="table" width="80%">
+	     		<th></th>
+	     		<th>Book</th>
+	     		<th class="col-md-2">Offer Price</th>
+	     		<th class="col-md-2">Auction Price</th>
+	     		{% for follow in follows %}
+	         	<tr>
+	    			<td class="col-md-1"><button type="submit" id="unfollow_{{follow.book.isbn}}" data-toggle="modal" data-target="#unfollow_modal_{{follow.book.isbn}}"
+	    				class="btn btn-default translucent_button"><span><strong>UNFOLLOW</strong></span></button></td>
+	         		<td class="col-md-7"><a href="/book/?isbn={{follow.book.isbn}}">{{follow.book.title}}</a></td>
+	         		<td class="col-md-2">{% if follow.min_offer %}${{follow.min_offer.buy_price}}{% else %}No offers{% endif %}</td>
+	         		<td class="col-md-2">{% if follow.min_auction %}${{follow.min_auction.current_price}}{% else %}No auctions{% endif %}</td>
+	         	</tr>
+
+	         	<!-- unfollow modal -->
+				<div class="modal fade" id="unfollow_modal_{{follow.book.isbn}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				  <div class="modal-dialog">
+					<div class="modal-content">
+				  		<div class="modal-header">
+				    		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				  		</div>
+				  		<div id="follow_modal_body" class="modal-body">
+				 			Are you sure you want to unfollow {{follow.book.title}}?
+				  		</div>
+				 		<div class="modal-footer">
+				 			<form id="unfollow_{{follow.book.isbn}}" action="/account/" method="post">{% csrf_token %}
+				 				<button type="button" class="btn btn-default translucent_button" data-dismiss="modal">No</button>
+								<input type="hidden" id="action" name="action" value="unfollow">
+				            	<input type="hidden" id="target_isbn" name="target_isbn" value="{{follow.book.isbn}}">
+				            	<button type="submit" name="book_isbn" value="{{ follow.book.isbn}}"
+				        			data-dismiss="modal" onclick="document.getElementById('unfollow_{{follow.book.isbn}}').submit(); return false;" class="btn btn-default blue_button">Yes
+				        		</button>
+					    	</form>
+				  		</div>
+					</div>
+				  </div>
+				</div>
+				<!-- end of follow prompt modal -->
+	         {% endfor %}
+	         </table>
+	     {% else %}
+	     <h2>You are not currently following any books.</h2>
+	     {% endif %}
+
+         </h2>
+      </div>
+</div>
+
+<!--   FOR UPDATING YOUR PROFILE -->
+
+<div class="modal fade" id="profile_modal" tabindex="-1" role="dialog"
+  aria-labelledby="profileModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:350px">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        </div>
+        <h2>
+        <div id="profile_modal_body" class="modal-body">
+		   <form id="profile_form" method="post" action="/account/"> {% csrf_token %}
+		   		<input type="hidden" id="action" name="action" value="update">
+				<div class="form-group">
+
+				<label for="class_year" class="control-label">Class Year:</label>
+					<input type="text" name="class_year" id="class_year" class="form-control" style="width:100px" value="{{ user.bookuser.class_year }}"
+				    required pattern="20(1[4-9]|[2-9][0-9])" title="Enter your graduation year 20XX" />
+			    </div>
+			    <div class="form-group">
+			    <label for="default_search" class="control-label">Select your default search option:</label><br>
+				    <label><input required name="default_search" type="radio"   id="title"  value="title" style="font-size:14px"/> Title</label>
+				    <label><input required name="default_search" type="radio"   id="isbn"  value="isbn" style="font-size:14px"/> ISBN</label>
+				    <label><input required name="default_search" type="radio"   id="author"  value="author" style="font-size:14px"/> Author</label>
+				    <label><input required name="default_search" type="radio"   id="course"  value="course" style="font-size:14px"/> Course</label>
+			    </div>
+			</form>
+			<div class="modal-footer">
+				<button type="submit" id="submit" class="btn btn-default blue_button" form="profile_form">
+			    	<span>Update</span>
+				</button>
+			 </div>
+        </div>
+		</h2>
+	   </div>
+    </div>
+</div>
+
+
+
+{% endblock content %}

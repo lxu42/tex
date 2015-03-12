@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+{% block title %}tex{% endblock title %}
+{% block header %}
+<style>
+body{
+	background: #FBFBFB;
+	font-size: 100%;
+}
+h1 {font-size: 3em;}
+h2 {font-size: 2em;}
+h3 {font-size: 1.75em;}
+
+.tex {color:#008080;}
+
+</style>
+
+<script>
+$(function () {
+	$('#collapseOne').collapse("hide");
+	$('#collapseTwo').collapse("hide");
+	$('#collapseThree').collapse("hide");
+});
+
+</script>
+{% endblock header %}
+{% block navbar %}
+{% endblock navbar %}
+
+{% block body %}
+<div class="container">
+	<div class="page-header">
+		<h1> What is <a href="http://princetontex.herokuapp.com/"><span class="tex">tex</span></a>? <br/>
+			<small> <span class="tex">tex</span> is a site for buying and selling books on campus.
+				Learn all about our fan<span class="tex">tex</span>tic features here! </small>
+	  	</h1>
+ 	</div>
+ 	<div class="center-img">
+ 		<img class="big-shot" src="/static/home.JPG" alt="tex homepage">
+ 	</div>
+  	<br>
+  	<br>
+  	<!-- BIG BUTTON -->
+  	<h2 class="tex"><a href="http://princetontex.herokuapp.com/">
+		<button class="btn btn-default blue_button">
+			<span><strong>Try it yourself!</strong></span>
+		</button></a>
+	</h2>
+  	<br>
+  	<br>
+	<div class="panel-group" id="accordion">
+	  <div class="panel panel-default">
+	    <div class="panel-heading">
+	      <h2 class="panel-title">
+	        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+	          <strong>Buying made easy!</strong>
+	        </a>
+	      </h2>
+	    </div>
+	    <div id="collapseOne" class="panel-collapse collapse in">
+	   <div class="panel-body">
+	  	<ul class="media-list">
+	  		<li class="media">
+	  			<img class="pull-right md-shot" src="/static/search.png" alt="tex search bar">
+	        	<div class="media-body md-vert-center">
+	          		<h3>Search by title, course, author, or ISBN for fast and accurate results.</h3>
+	        	</div>
+	    	</li>
+	    	<br>
+	    	<li class="media">
+	  			<img class="md-shot pull-left" src="/static/book page.JPG" alt="tex book page">
+	        	<div class="media-body lg-vert-center">
+	          		<h3>See the prices of all auctions and offers in the same place.</h3>
+	        	</div>
+	    	</li>
+	       	<br>
+	    	<li class="media">
+	  			<img class="pull-right" src="/static/bidmodal.JPG" alt="tex book page">
+	        	<div class="media-body lg-vert-center">
+	          		<h3 class="pull-right">You choose your price! With our auction feature, you can now bid on books sold by
+	          			fellow students. The time remaining in the auction is always displayed as a countdown so there are no surprises.
+	          			If you are in a hurry to get the book, you can pay the Buy Now price and immediately win the auction!
+	          		</h3>
+	        	</div>
+	    	</li>
+	    	<li class="media">
+	  			<img class="pull-left" src="/static/addbook.JPG" alt="tex book page">
+	        	<div class="media-body md-vert-center">
+	          		<h3 class="pull-right"> Can't find the book you seek?  Search by ISBN to instantly add the book to our
+	          			database.  It's as easy as that!
+	          		</h3>
+	        	</div>
+	    	</li>
+	    </ul>
+	       </div>
+	    </div>
+	  </div>
+	</div>
+
+	<div class="panel panel-default">
+	    <div class="panel-heading">
+	      <h2 class="panel-title">
+	        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+	          <strong>Selling made easy!</strong>
+	        </a>
+	      </h2>
+	    </div>
+		<div id="collapseTwo" class="panel-collapse collapse in">
+		   <div class="panel-body">
+			  	<ul class="media-list">
+			    	<li class="media">
+			  			<img class="pull-left" src="/static/sell modal.JPG" alt="tex book page">
+			        	<div class="media-body md-vert-center">
+			          		<h3>If you're looking to sell you can search for your book with the search bar.
+			          			Alternatively, you can use our quick sell feature and be taken directly to the sell form.
+			          		</h3>
+			        	</div>
+			    	</li>
+			    	<br>
+			    	<li class="media">
+			  			<img class="md-shot pull-right" src="/static/book page.JPG" alt="tex book page">
+			        	<div class="media-body lg-vert-center">
+			          		<h3>Use other campus offers, the Amazon list price, and links to other sites to help you gauge
+			          			your selling point!
+			          		</h3>
+			        	</div>
+			    	</li>
+			    	<br>
+			    	<li class="media">
+			  			<img class="pull-left" src="/static/bidmodal.JPG" alt="tex book page">
+			        	<div class="media-body lg-vert-center">
+			          		<h3 class="pull-right">With our auction feature, students can now bid on the books you want to sell!
+			          			You control the baseline price for the book and when the auction will end.  You can also set a maximum
+			          			price at which you'd be happy to sell the book immediately.
+			          		</h3>
+			        	</div>
+			    	</li>
+			    </ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel panel-default">
+	    <div class="panel-heading">
+	      <h2 class="panel-title">
+	        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+	          <strong>Account made easy!</strong>
+	        </a>
+	      </h2>
+	    </div>
+	    <div id="collapseThree" class="panel-collapse collapse in">
+	   <div class="panel-body">
+	  	<ul class="media-list">
+	  		<li class="media">
+			  	<img class="pull-right md-shot" src="/static/unfollow.JPG" alt="tex follow">
+			    	<div class="media-body md-vert-center">
+			          	<h3> Stay in the loop: follow a book that isn't currently offered or is too
+			          		expensive right now. You will be alerted when a new offer is made!  Once
+			          		you find a satisfactory offer, you can unfollow to quit receiving notifications.
+			          	</h3>
+			        </div>
+			</li>
+			<br />
+	  		<li class="media">
+			  	<img class="pull-left md-shot" src="/static/outbidemail.JPG" alt="tex book page">
+			    	<div class="media-body md-vert-center">
+			          	<h3> Activity Notifications: When events occur that directly concern you, you will receive
+			          		an email with all the important details.
+			          	</h3>
+			        </div>
+			</li>
+			<li class="media">
+			  	<img class="pull-right sm-shot" src="/static/profile.png" alt="tex follow">
+			    	<div class="media-body lg-vert-center">
+			          	<h3> Customize your book-searching experience!  Change your profile settings to search by
+			          		your preferred field by default.
+			          	</h3>
+			        </div>
+			</li>
+			<br/>
+	  	</ul>
+			</div>
+		</div>
+	</div>
+	<br>
+	<br>
+</div>
+{% endblock body %}
+{% block footer %}
+{% endblock footer %}
